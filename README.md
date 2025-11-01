@@ -194,6 +194,6 @@ Puoi usare, condividere e adattare l’opera **senza scopi commerciali**, citand
 
 ## <a id="video"></a>📹 Video dimostrativo
 
-[▶ Guarda il video](media/video_example.mp4)
+![Demo](media/video_example.gif)
 
 *(Il video mostra: upload PDF, estrazione, gestione inclusi/esclusi per toponimo e per pagina, modalità focus/flottante dei moduli, avvio geocoding e lettura del GeoJSON in mappa.)*

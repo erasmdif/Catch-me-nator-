@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+workspace/
+*.log
+.cache/
+geocache_toponyms.json
+geocode_progress.json

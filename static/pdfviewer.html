@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PDF Viewer</title>
+<style>
+  html,body{
+    margin:0; padding:0;
+    background:#1a1d27;
+    color:#fff;
+    height:100%;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+  #scrollHost{
+    position:relative;
+    height:100vh;
+    overflow:auto;
+    background:#1a1d27;
+  }
+  .pageWrapper{
+    position:relative;
+    margin:12px auto;
+    background:#2a2f3f;
+    border-radius:8px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.6);
+    padding:8px;
+    width:max-content;
+  }
+  canvas{
+    display:block;
+    background:#fff;
+    border-radius:4px;
+  }
+  .hl-box{
+    position:absolute;
+    border:2px solid rgba(255,255,0,.9);
+    background:rgba(255,255,0,.3);
+    border-radius:4px;
+    box-shadow:0 0 8px rgba(0,0,0,.6);
+    pointer-events:none;
+  }
+</style>
+<!-- pdf.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.js" integrity="" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.js" integrity="" crossorigin="anonymous"></script>
+<script>
+// viewer script inline è molto piccolo, ma per chiarezza lo deleghiamo subito a pdfviewer.js
+</script>
+</head>
+<body>
+  <div id="scrollHost"></div>
+
+  <script src="/static/pdfviewer.js"></script>
+</body>
+</html>

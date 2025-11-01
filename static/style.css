@@ -1,0 +1,1014 @@
+:root{
+  --bg:#0f1115; --panel:#161a22; --muted:#8a94a6; --fg:#eaedf2; --accent:#5ac8fa; --accent2:#a0e05a;
+  --border:#242a36; --warn:#f7b955;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+header{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 16px; border-bottom:1px solid var(--border); background:#0e1015;
+  position:sticky; top:0; z-index:10;
+}
+h1{margin:0; font-size:18px}
+#downloads a{color:var(--accent); margin-left:12px; text-decoration:none}
+#downloads a:hover{text-decoration:underline}
+
+main{display:flex; height:calc(100vh - 56px);}
+#sidebar{
+  width:320px; padding:12px; border-right:1px solid var(--border); overflow:auto; background:var(--panel);
+}
+#content{flex:1; padding:12px; overflow:auto}
+.panel{
+  background:#121621; border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:12px;
+}
+.panel h2{margin:0 0 8px 0; font-size:16px}
+.hint{color:var(--muted); margin:6px 0 0}
+
+.dropzone{
+  position:relative; border:1px dashed var(--border); border-radius:10px; text-align:center; padding:20px; color:var(--muted);
+}
+.dropzone input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer}
+.row{display:flex; gap:8px; align-items:center; margin-top:8px}
+.row input{flex:1; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#0f1320; color:var(--fg)}
+
+#ranges{width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#0f1320; color:var(--fg)}
+
+button{
+  width:100%; padding:10px 12px; border:none; border-radius:10px; background:#20273a; color:var(--fg); cursor:pointer;
+}
+button.primary{background:linear-gradient(90deg, var(--accent), #8ac5ff)}
+button:hover{filter:brightness(1.05)}
+
+.list{max-height:280px; overflow:auto; border:1px solid var(--border); border-radius:10px; padding:8px; background:#0f1320}
+.list .item{display:flex; justify-content:space-between; padding:6px 8px; border-radius:8px}
+.list .item:nth-child(odd){background:#0c1019}
+.list .count{color:var(--muted)}
+
+.viewer-split{display:grid; grid-template-rows:1fr 1fr; gap:12px; height:100%}
+.viewer{display:flex; flex-direction:column; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:#0f1320}
+.viewer-header{padding:8px 10px; border-bottom:1px solid var(--border); color:var(--muted); background:#0b0e16}
+#pdfFrame{flex:1; width:100%}
+#map{flex:1; width:100%; height:100%}
+
+footer{
+  position:fixed; bottom:8px; left:8px; color:var(--muted); font-size:12px; opacity:0.8;
+}
+
+/* toast */
+#toast{
+  position:fixed; right:16px; top:64px; min-width:220px; background:#111827; color:#e5e7eb; padding:10px 12px;
+  border:1px solid #374151; border-radius:8px; display:none; z-index:9999;
+}
+
+/* selezione elementi */
+.selectable .item { cursor: pointer; user-select: none; }
+.selectable .item.selected { outline: 1px solid var(--accent); background:#0a1522; }
+
+/* progress bar */
+.progress { position: relative; margin-top:10px; height:16px; background:#0f1320; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+.progress.hidden { display:none; }
+.progress-bar { position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg,var(--accent),#8ac5ff); }
+.progress-text { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:12px; color:#e5e7eb; opacity:0.9; }
+.row-actions{ display:flex; gap:8px; margin-top:8px; }
+
+/* --- NUOVE CLASSI PER LISTA TOPONIMI/ATTESTAZIONI --- */
+
+/* contenitore riga principale del toponimo */
+.row-main{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+}
+
+/* bottone per espandere ▶ / ▼ */
+.expand-btn{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  padding:2px 4px;
+  cursor:pointer;
+}
+.expand-btn:hover{
+  filter:brightness(1.1);
+}
+
+/* checkbox + label del toponimo */
+.sel-topo{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:14px;
+  line-height:1.3;
+}
+.sel-topo input[type=checkbox]{
+  cursor:pointer;
+}
+
+/* sottolista di attestazioni (pagine) */
+.sublist{
+  margin-top:6px;
+  margin-left:16px;
+  border-left:1px solid var(--border);
+  padding-left:8px;
+}
+
+/* singola attestazione (p. XX) */
+.subitem.att{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:4px 6px;
+  border-radius:6px;
+  background:#0c1019;
+  margin-bottom:4px;
+  font-size:13px;
+}
+.subitem.att.excluded{
+  opacity:0.5;
+}
+
+.att-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.att-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.sel-att{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+}
+.sel-att input[type=checkbox]{
+  cursor:pointer;
+}
+
+.att-status{
+  color:var(--warn);
+  font-size:11px;
+}
+
+/* bottone "Vai" (PDF+mappa) */
+.goto-btn{
+  background:#20273a;
+  border:none;
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  padding:4px 6px;
+  cursor:pointer;
+}
+.goto-btn:hover{
+  filter:brightness(1.1);
+}
+
+/* sotto-sezioni nel pannello "Toponimi esclusi" */
+.subpanel-title{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  margin:8px 0 4px;
+  padding-left:2px;
+  text-transform:uppercase;
+  letter-spacing:0.03em;
+}
+
+/* riga per esclusi globali */
+.item.excluded-topo,
+.item.excluded-att{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:6px 8px;
+  border-radius:8px;
+  background:#0c1019;
+  margin-bottom:4px;
+  font-size:13px;
+}
+.excluded-info-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.term-label{
+  font-size:13px;
+  color:var(--fg);
+}
+/* --- NUOVE CLASSI PER LISTA TOPONIMI/ATTESTAZIONI --- */
+
+.row-main{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+}
+
+.expand-btn{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  padding:2px 4px;
+  cursor:pointer;
+}
+.expand-btn:hover{
+  filter:brightness(1.1);
+}
+
+.sel-topo{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:14px;
+  line-height:1.3;
+}
+.sel-topo input[type=checkbox]{
+  cursor:pointer;
+}
+
+.sublist{
+  margin-top:6px;
+  margin-left:16px;
+  border-left:1px solid var(--border);
+  padding-left:8px;
+}
+
+.subitem.att{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:4px 6px;
+  border-radius:6px;
+  background:#0c1019;
+  margin-bottom:4px;
+  font-size:13px;
+}
+.subitem.att.excluded{
+  opacity:0.5;
+}
+
+.att-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.att-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.sel-att{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+}
+.sel-att input[type=checkbox]{
+  cursor:pointer;
+}
+
+.att-status{
+  color:var(--warn);
+  font-size:11px;
+}
+
+.goto-btn{
+  background:#20273a;
+  border:none;
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  padding:4px 6px;
+  cursor:pointer;
+}
+.goto-btn:hover{
+  filter:brightness(1.1);
+}
+
+.subpanel-title{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  margin:8px 0 4px;
+  padding-left:2px;
+  text-transform:uppercase;
+  letter-spacing:0.03em;
+}
+
+.item.excluded-topo,
+.item.excluded-att{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:6px 8px;
+  border-radius:8px;
+  background:#0c1019;
+  margin-bottom:4px;
+  font-size:13px;
+}
+
+.excluded-info-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.term-label{
+  font-size:13px;
+  color:var(--fg);
+}
+
+/* --- LAYOUT TOPONIMI INCLUSI (verticale, gerarchico) --- */
+
+/* blocco intero del toponimo incluso */
+.topo-block{
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#0f1320;
+  padding:6px;
+  margin-bottom:8px;
+}
+
+/* prima riga del toponimo (freccia, checkbox, nome, count) */
+.topo-header{
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+  color:var(--fg);
+  font-size:14px;
+  line-height:1.3;
+}
+
+/* freccia ▶ / ▼, dimensione fissa così non si deforma quando il nome va a capo */
+.expand-btn{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  width:20px;
+  min-width:20px;
+  height:20px;
+  padding:0;
+  line-height:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.expand-btn:hover{
+  filter:brightness(1.1);
+}
+
+/* checkbox + nome toponimo + count */
+.sel-topo{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  gap:6px;
+  font-size:14px;
+  line-height:1.4;
+  max-width:220px; /* evita che il count scappi troppo a destra nella sidebar stretta */
+}
+.sel-topo input[type=checkbox]{
+  cursor:pointer;
+}
+
+/* count dei toponimi inclusi, in stile "(3)" */
+.sel-topo .count{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+  font-weight:400;
+}
+
+/* sottolista pagine del toponimo */
+.sublist{
+  margin-top:6px;
+  margin-left:26px; /* allineata dopo la freccia */
+  border-left:1px solid var(--border);
+  padding-left:8px;
+}
+
+/* riga singola di attestazione (p. XX) */
+.att-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  background:#0c1019;
+  border-radius:6px;
+  padding:4px 6px;
+  margin-bottom:4px;
+  font-size:13px;
+}
+.att-row.excluded{
+  opacity:0.5;
+}
+
+/* blocchetto checkbox + "p. XX" */
+.att-check{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+}
+.att-page{
+  font-weight:500;
+  font-size:13px;
+  color:var(--fg);
+}
+
+/* stato esclusione su quella pagina */
+.att-status{
+  color:var(--warn);
+  font-size:11px;
+  line-height:1.2;
+}
+
+/* bottone Vai */
+.goto-btn{
+  background:#20273a;
+  border:none;
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  padding:4px 6px;
+  cursor:pointer;
+  line-height:1.2;
+}
+.goto-btn:hover{
+  filter:brightness(1.1);
+}
+
+
+/* --- LAYOUT TOPONIMI ESCLUSI (raggruppati) --- */
+
+/* gruppo di esclusione per un toponimo (es. "Appunto (2)") */
+.excluded-group{
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#0f1320;
+  padding:6px;
+  margin-bottom:8px;
+}
+
+/* header tipo "Appunto (2)" oppure "Toponimo (tutto)" */
+.excluded-group-header{
+  font-size:13px;
+  font-weight:600;
+  color:var(--fg);
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px;
+  margin-bottom:4px;
+}
+.excluded-group-header .count{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:400;
+  line-height:1.3;
+}
+
+/* per la riga "checkbox + nome (tutto)" all'interno del global */
+.excluded-topo-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  line-height:1.3;
+}
+
+/* contenitore sottolista pagine escluse per quel toponimo */
+.excluded-group-pages{
+  margin-left:8px;
+  border-left:1px solid var(--border);
+  padding-left:8px;
+}
+
+/* riga singola "p. 61 [Vai] [checkbox]" */
+.excluded-att-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  background:#0c1019;
+  border-radius:6px;
+  padding:4px 6px;
+  margin-bottom:4px;
+  font-size:13px;
+}
+.excluded-att-row label{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/* testo del nome/pagina */
+.term-label{
+  font-size:13px;
+  color:var(--fg);
+}
+/* =============== LISTA TOPONIMI (INCLUSI / ESCLUSI) ================= */
+
+/* contenitore di UN toponimo (sia incluso che escluso) */
+.topo-block{
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#0f1320;
+  padding:6px;
+  margin-bottom:8px;
+  color:var(--fg);
+  font-size:14px;
+  line-height:1.4;
+}
+
+/* variante visiva per gli esclusi (leggermente più spenta) */
+.topo-block.excluded-block{
+  background:#131425;
+  opacity:0.9;
+}
+
+/* header della voce toponimo:
+   contiene freccia, checkbox globale, nome, (N) */
+.topo-header{
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+  color:var(--fg);
+  font-size:14px;
+  line-height:1.3;
+  flex-wrap:nowrap;
+}
+
+/* freccia ▶ / ▼, dimensioni fisse */
+.expand-btn{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  width:20px;
+  min-width:20px;
+  height:20px;
+  padding:0;
+  line-height:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.expand-btn:hover{
+  filter:brightness(1.1);
+}
+
+/* checkbox globale + nome toponimo + count */
+.sel-topo{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  gap:6px;
+  font-size:14px;
+  line-height:1.4;
+  max-width:220px; /* sidebar stretta => testo va a capo qui */
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+.sel-topo input[type=checkbox]{
+  cursor:pointer;
+}
+
+/* count in forma "(3)" / "(tutto)" */
+.sel-topo .count{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.3;
+  font-weight:400;
+}
+
+/* sottolista pagine (attestazioni) per quel toponimo;
+   parte nascosta (hidden-sublist) finché non si espande */
+.sublist{
+  margin-top:6px;
+  margin-left:26px; /* indent dopo la freccia */
+  border-left:1px solid var(--border);
+  padding-left:8px;
+}
+.hidden-sublist{
+  display:none;
+}
+
+/* singola attestazione (p. 52 ...) */
+.att-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  background:#0c1019;
+  border-radius:6px;
+  padding:4px 6px;
+  margin-bottom:4px;
+  font-size:13px;
+  line-height:1.3;
+  color:var(--fg);
+}
+.att-row.excluded{
+  opacity:0.5;
+}
+
+/* parte sinistra dell'attestazione con checkbox + "p. XX" */
+.att-check{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  line-height:1.3;
+}
+.att-check input[type=checkbox]{
+  cursor:pointer;
+}
+.att-page{
+  font-weight:500;
+  color:var(--fg);
+  font-size:13px;
+  line-height:1.3;
+}
+
+/* testo stato esclusione */
+.att-status{
+  color:var(--warn);
+  font-size:11px;
+  line-height:1.2;
+}
+
+/* bottone Vai */
+.goto-btn{
+  background:#20273a;
+  border:none;
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  padding:4px 6px;
+  cursor:pointer;
+  line-height:1.2;
+}
+.goto-btn:hover{
+  filter:brightness(1.1);
+}
+
+/* etichetta testo toponimo/pagina */
+.term-label{
+  font-size:13px;
+  color:var(--fg);
+  line-height:1.4;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+
+/* ====== VIEWER LAYOUT E MODALITÀ (split / focus / float) ====== */
+
+/* contenitore destro */
+#content{
+  position:relative;
+  flex:1;
+  padding:12px;
+  overflow:auto;
+  /* data-layout gestito via JS */
+}
+
+/* di default (split): due righe 50/50 */
+#content[data-layout="split"] .viewer-split{
+  display:grid;
+  grid-template-rows:1fr 1fr;
+  gap:12px;
+  height:100%;
+}
+
+/* negli altri layout usiamo una sola "riga base" */
+#content[data-layout="focus-pdf"] .viewer-split,
+#content[data-layout="focus-map"] .viewer-split,
+#content[data-layout="float-pdf"] .viewer-split,
+#content[data-layout="float-map"] .viewer-split{
+  display:block;
+  height:100%;
+}
+
+/* viewer generico */
+.viewer{
+  position:relative; /* importante per overlay resize/drag */
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  background:#0f1320;
+  height:100%;
+}
+
+/* header del viewer ora è flex tra titolo e controlli */
+.viewer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 10px;
+  border-bottom:1px solid var(--border);
+  color:var(--muted);
+  background:#0b0e16;
+  user-select:none;
+}
+
+/* titolo a sinistra */
+.viewer-title{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.2;
+  font-weight:500;
+  max-width:calc(100% - 80px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* pulsantini layout */
+.viewer-controls{
+  display:flex;
+  gap:4px;
+}
+.viewer-controls button{
+  background:#20273a;
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  line-height:1.2;
+  padding:4px 6px;
+  cursor:pointer;
+}
+.viewer-controls button:hover{
+  filter:brightness(1.1);
+}
+
+/* corpo del viewer:
+   lo rendiamo relativo e facciamo riempire iframe/map in assoluto */
+.viewer-body{
+  position:relative;
+  flex:1;
+  overflow:hidden;
+}
+
+/* iframe PDF dentro .viewer-body */
+#pdfFrame{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+}
+
+/* mappa Leaflet dentro .viewer-body */
+#map{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
+/* ========== modalità focus-pdf: PDF prende tutto, Mappa sparisce ========== */
+#content[data-layout="focus-pdf"] #pdfContainer{
+  display:flex;
+  height:100%;
+}
+#content[data-layout="focus-pdf"] #mapContainer{
+  display:none;
+}
+
+/* ========== modalità focus-map: Mappa prende tutto, PDF sparisce ========== */
+#content[data-layout="focus-map"] #mapContainer{
+  display:flex;
+  height:100%;
+}
+#content[data-layout="focus-map"] #pdfContainer{
+  display:none;
+}
+
+/* ========== modalità float-pdf:
+   - la mappa è "fullscreen" nell'area content
+   - il PDF è finestrella mobile sopra
+======================================================= */
+#content[data-layout="float-pdf"] #mapContainer{
+  display:flex;
+  height:100%;
+}
+#content[data-layout="float-pdf"] #pdfContainer{
+  position:absolute;
+  z-index:1000;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);
+  border:2px solid var(--accent);
+  background:#0f1320;
+  border-radius:12px;
+  resize:both;
+  overflow:hidden;
+  min-width:240px;
+  min-height:180px;
+  max-width:90%;
+  max-height:90%;
+  /* left/top/width/height vengono impostati inline da JS */
+}
+
+/* ========== modalità float-map:
+   - il PDF è fullscreen nell'area content
+   - la mappa è la finestrella mobile sopra
+======================================================= */
+#content[data-layout="float-map"] #pdfContainer{
+  display:flex;
+  height:100%;
+}
+#content[data-layout="float-map"] #mapContainer{
+  position:absolute;
+  z-index:1000;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);
+  border:2px solid var(--accent2);
+  background:#0f1320;
+  border-radius:12px;
+  resize:both;
+  overflow:hidden;
+  min-width:240px;
+  min-height:180px;
+  max-width:90%;
+  max-height:90%;
+  /* left/top/width/height impostati inline da JS */
+}
+
+/* quando un viewer è in floating mode, l'header funge da "barra di trascinamento" */
+#content[data-layout="float-pdf"] #pdfContainer .viewer-header,
+#content[data-layout="float-map"] #mapContainer .viewer-header{
+  cursor:move;
+}
+
+/* l'altro viewer in float-mode (quello fullscreen dietro) rimane normale */
+#content[data-layout="float-pdf"] #mapContainer .viewer-header,
+#content[data-layout="float-map"] #pdfContainer .viewer-header{
+  cursor:default;
+}
+
+/* ========== layout split (default) ========== */
+#content[data-layout="split"] #pdfContainer,
+#content[data-layout="split"] #mapContainer{
+  position:relative;
+  display:flex;
+  height:100%;
+}
+
+/* Fine layout viewer */
+
+
+/* ====== (già presenti, ma li ripetiamo / override dove serve) ====== */
+
+/* blocchi toponimi gerarchici */
+.topo-block{
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#0f1320;
+  padding:6px;
+  margin-bottom:8px;
+  color:var(--fg);
+  font-size:14px;
+  line-height:1.4;
+}
+.topo-block.excluded-block{
+  background:#131425;
+  opacity:0.9;
+}
+.topo-header{
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+  color:var(--fg);
+  font-size:14px;
+  line-height:1.3;
+  flex-wrap:nowrap;
+}
+.expand-btn{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  width:20px;
+  min-width:20px;
+  height:20px;
+  padding:0;
+  line-height:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.expand-btn:hover{
+  filter:brightness(1.1);
+}
+.sel-topo{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  gap:6px;
+  font-size:14px;
+  line-height:1.4;
+  max-width:220px;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+.sel-topo input[type=checkbox]{
+  cursor:pointer;
+}
+.sel-topo .count{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.3;
+  font-weight:400;
+}
+.sublist{
+  margin-top:6px;
+  margin-left:26px;
+  border-left:1px solid var(--border);
+  padding-left:8px;
+}
+.hidden-sublist{
+  display:none;
+}
+.att-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  background:#0c1019;
+  border-radius:6px;
+  padding:4px 6px;
+  margin-bottom:4px;
+  font-size:13px;
+  line-height:1.3;
+  color:var(--fg);
+}
+.att-row.excluded{
+  opacity:0.5;
+}
+.att-check{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  line-height:1.3;
+}
+.att-check input[type=checkbox]{
+  cursor:pointer;
+}
+.att-page{
+  font-weight:500;
+  color:var(--fg);
+  font-size:13px;
+  line-height:1.3;
+}
+.att-status{
+  color:var(--warn);
+  font-size:11px;
+  line-height:1.2;
+}
+.goto-btn{
+  background:#20273a;
+  border:none;
+  border-radius:6px;
+  color:var(--fg);
+  font-size:12px;
+  padding:4px 6px;
+  cursor:pointer;
+  line-height:1.2;
+}
+.goto-btn:hover{
+  filter:brightness(1.1);
+}
+.term-label{
+  font-size:13px;
+  color:var(--fg);
+  line-height:1.4;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+

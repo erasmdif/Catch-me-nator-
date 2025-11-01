@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <title>Toponimi PDF</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="/static/style.css" rel="stylesheet" />
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+</head>
+<body>
+  <header>
+    <h1>Toponimi PDF</h1>
+    <div id="downloads"></div>
+  </header>
+
+  <main>
+    <aside id="sidebar">
+      <section class="panel">
+        <h2>1) Carica PDF</h2>
+        <div id="dropzone" class="dropzone">
+          Trascina qui il tuo PDF oppure clicca
+          <input type="file" id="fileinput" accept=".pdf" />
+        </div>
+        <div class="row">
+          <label>ID sessione:</label>
+          <input type="text" id="jobId" placeholder="(generato al caricamento)" readonly />
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>2) Range pagine (opzionale)</h2>
+        <input id="ranges" type="text" placeholder="es. 51-100" />
+        <p class="hint">
+          Interpreta numeri di pagina 1-based (come sul viewer). Lascia vuoto per tutte.
+        </p>
+      </section>
+
+      <section class="panel">
+        <h2>3) Estrai dati (CSV + PDF marcato)</h2>
+        <button id="btnExtract" class="primary">Estrai CSV</button>
+      </section>
+
+      <section class="panel">
+        <h2>4) Geocoding (GeoJSON)</h2>
+        <button id="btnGeocode">Avvia geocoding</button>
+        <div id="progress" class="progress hidden">
+          <div class="progress-bar" id="progressBar"></div>
+          <div class="progress-text" id="progressText">0%</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>5) Toponimi inclusi</h2>
+        <p class="hint">
+          ▶ per aprire le attestazioni (pagine).<br/>
+          Spunta il toponimo per escluderlo ovunque;<br/>
+          spunta la singola pagina per escludere solo quella.<br/>
+          “Vai” porta PDF+mappa.
+        </p>
+
+        <div class="list" id="toponymsList"></div>
+
+        <div class="row-actions">
+          <button id="btnExcludeAll" title="Escludi i toponimi selezionati">
+            ➖ Escludi toponimo/i
+          </button>
+          <button id="btnExcludeAtt" title="Escludi le attestazioni selezionate">
+            ➖ Escludi attestazioni
+          </button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>6) Toponimi esclusi</h2>
+        <p class="hint">
+          Anche qui ▶ per le pagine escluse / filtrate (incluse quelle scartate automaticamente).
+          Spunta per re-includere tutto o singole attestazioni.
+        </p>
+
+        <div class="list" id="excludedList"></div>
+
+        <div class="row-actions">
+          <button id="btnIncludeAll" title="Re-includi i toponimi selezionati">
+            ➕ Re-includi toponimo/i
+          </button>
+          <button id="btnIncludeAtt" title="Re-includi le attestazioni selezionate">
+            ➕ Re-includi attestazioni
+          </button>
+        </div>
+      </section>
+    </aside>
+
+    <!-- IMPORTANTISSIMO:
+         aggiungiamo data-layout="split" per gestire le modalità -->
+    <section id="content" data-layout="split">
+      <div class="viewer-split" id="viewerSplit">
+
+        <!-- PDF viewer -->
+        <div class="viewer" id="pdfContainer">
+          <div class="viewer-header">
+            <span class="viewer-title">PDF marcato</span>
+            <div class="viewer-controls">
+              <button class="ctrl-full" data-target="pdf" title="A tutto schermo (PDF)">⛶</button>
+              <button class="ctrl-float" data-target="pdf" title="PDF in finestra mobile">📌</button>
+              <button class="ctrl-reset" data-target="pdf" title="Ripristina layout">↺</button>
+            </div>
+          </div>
+          <div class="viewer-body">
+            <iframe id="pdfFrame" title="PDF marcato" frameborder="0"></iframe>
+          </div>
+        </div>
+
+        <!-- MAP viewer -->
+        <div class="viewer" id="mapContainer">
+          <div class="viewer-header">
+            <span class="viewer-title">Mappa (GeoJSON)</span>
+            <div class="viewer-controls">
+              <button class="ctrl-full" data-target="map" title="A tutto schermo (Mappa)">⛶</button>
+              <button class="ctrl-float" data-target="map" title="Mappa in finestra mobile">📌</button>
+              <button class="ctrl-reset" data-target="map" title="Ripristina layout">↺</button>
+            </div>
+          </div>
+          <div class="viewer-body">
+            <div id="map"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Estrattore locale – spaCy + OSM (Nominatim)</span>
+  </footer>
+
+  <div id="toast"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
